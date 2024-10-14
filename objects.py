@@ -1,6 +1,7 @@
 import pdb
 import random
 from ui import Draw
+from ascii_engine import ascii_printer
 
 class Card:
     def __init__(self, rank=None, suit=None):
@@ -27,9 +28,7 @@ class Card:
 class Hand:
     def __init__(self):
         self.hand = []
-        self.handsize = 7
-        # self.draw_starting_hand()
-
+        self.handsize = 7 
 
     def fan(self):
         
@@ -45,6 +44,8 @@ class Hand:
         # else:
         #     print("self.hand empty")
 
+        ascii_printer(self.hand)
+
 class Deck:
     def __init__(self):
         self.cards = []
@@ -53,6 +54,7 @@ class Deck:
 
     def _populate_deck(self):
         # pdb.set_trace()
+
         for suit in ['hearts', 'clubs','spades','diamonds']:
             for rank in range(2,11): # range is non-inclusive
                 
