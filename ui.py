@@ -98,9 +98,11 @@ class Play:
         print(f'Selection: {selection}')
         input("Hand score check")
         print(self.ispokerhand(selection))
-        input("PAKTC") #press any key to continue
+        input("PAKTC") # PAKTC == press any key to continue
 
-    def ispokerhand(self):
+    def ispokerhand(self, selection):
+        self.rank_count(selection)
+        # call your rank count, flush check, straight check results, then start going though hands...
         
         ## hand ranks:
         # royal flush
@@ -124,10 +126,34 @@ class Play:
         # or, dict first, but populating the dict requires tallying all 13 ranks first
         # TODO: START HERE TOMORROW
         
-        count_dict = {4:[], 3: [], 2:[], 1:[]}
-        for card in selection:
+        rank_tally = {
+            "A": 0,
+            "K": 0,
+            "Q": 0,
+            "J:": 0,
+            "10": 0,
+            "9": 0,
+            "8": 0,
+            "7": 0,
+            "6": 0,
+            "5": 0,
+            "4": 0,
+            "3": 0,
+            "2": 0,
+        }
 
+        pdb.set_trace()
+        for card_in_hand in selection:
+            rank_tally[str(card_in_hand[1].rank)] += 1
 
+        print(rank_tally)
+        input()
+
+    def flush_check(self, selection):
+        pass
+
+    def straight_check(self, selection):
+        pass
 
 
     def __str__(self):
