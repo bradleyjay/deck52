@@ -7,6 +7,18 @@ class Card:
         self.rank = rank
         self.suit = suit
 
+    # def ascii_card(self):
+    #     print(
+    #         "____________" +
+    #         "|               |" +
+    #         f"|   {self.suit}{self.rank}  |" +
+    #         "|               |" +
+    #         "|_______________|" +
+
+
+
+    #     )
+
     # def print(self):
     def __str__(self):
         # print(self.rank, self.suit)
