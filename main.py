@@ -11,14 +11,24 @@
 # PoV: have a deck, have a hand, play cards into void, redraw to keep handsize = 7
 
 import pdb
+import logging
 from objects import Deck, Hand
 from ui import Menu
 import os
+import sys
 
+# set logging level, location
+# log = logging.getLogger(__name__)
+# log.setLevel(logging.INFO)
+# log.addHandler(
+#         logging.StreamHandler(sys.stdout)
+#     )
 
 mydeck = Deck()
 myhand = Hand()
 game_menu = Menu(mydeck, myhand)
+
+
 # mydeck._populate_deck()
 # print(mydeck)
 # mydeck.fan()
