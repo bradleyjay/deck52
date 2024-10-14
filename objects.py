@@ -15,13 +15,9 @@ class Card:
 class Hand:
     def __init__(self):
         self.hand = []
-        # self.deck = deck
         self.handsize = 7
         # self.draw_starting_hand()
 
-    def draw_starting_hand(self):
-        for i in range(0, self.handsize):
-            Draw.select(self)
 
     def fan(self):
         

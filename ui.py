@@ -9,7 +9,7 @@ class Menu:
         self.deck = deck
         self.hand = hand
         self.options = [
-            Draw(self.deck, self.hand),
+            # Draw(self.deck, self.hand),
             Play(self.deck, self.hand), 
             Discard(self.deck, self.hand),
             PickCards(self.deck, self.hand)
@@ -38,9 +38,10 @@ class Menu:
         
 class PickCards:
 
-    def __init__(self, deck, hand):
+    def __init__(self, deck, hand, mode=None):
         self.deck = deck
         self.hand = hand
+        self.mode = mode
 
     def select(self):
         # choice = int(input("Discard card - which one? Enter number"))
@@ -56,9 +57,9 @@ class PickCards:
             self.hand.fan()
             print("---- Selected Cards ----")
             for card in selection:
-                print(card)
+                print(f'{card[0]}), {card[1]}')
 
-            choice = input('Select cards. Enter number to add, y to confirm, c to cancel.')
+            choice = input(f'Select cards to {self.mode}. Enter number to add, y to confirm, c to cancel.')
             if choice == 'y':
                 break
             elif choice == 'c':
@@ -66,7 +67,7 @@ class PickCards:
             else:
                 selection.append([int(choice), self.hand.hand[int(choice)]])
 
-        print(f'Selected cards: {selection}')
+        # print(f'Selected cards: {selection}')
         return selection
         input()
 
@@ -86,6 +87,13 @@ class Draw:
         # print(f"I drew {drawn_card}")
         self.hand.hand.append(drawn_card)
 
+    def redraw_to_handsize(self):
+        cards_missing = self.hand.handsize - len(self.hand.hand)
+        if cards_missing > 0:
+            # pdb.set_trace()
+            for i in range(0, cards_missing):
+                self.select()
+
     def __str__(self):
         return 'Draw'
 
@@ -95,19 +103,20 @@ class Play:
         self.hand = hand
 
     def select(self):
-        picker = PickCards(self.deck, self.hand)
+        picker = PickCards(self.deck, self.hand, "play")
         # selection = PickCards.select()
         selection = picker.select()
-        print(f'Selection: {selection}')
+        # print(f'Selection: {selection}')
 
         # check poker hand
         print(self.ispokerhand(selection))
+        input("Continue...")
 
         # redraw played cards
         discarded_cards = Discard.discard_played_cards(self, selection)
         input(f"Re-drawing {discarded_cards} cards...")
-        for i in range(0,discarded_cards):
-            Draw.select(self)
+        # for i in range(0,discarded_cards):
+        #     Draw.select(self)
 
     def ispokerhand(self, selection):
         
@@ -266,7 +275,7 @@ class Play:
 
 
     def __str__(self):
-        return 'Play [WIP]'
+        return 'Play'
 
 
 class Discard:
@@ -275,12 +284,17 @@ class Discard:
         self.hand = hand
         
     def select(self):
-        choice = int(input("Discard card - which one? Enter number"))
+        picker = PickCards(self.deck, self.hand, "discard")
+        # selection = PickCards.select()
+        selection = picker.select()
+        discarded_cards = self.discard_played_cards(selection)
+
+        # choice = int(input("Discard card - which one? Enter number"))
         # discarded_cards = self.hand.hand[choice]
-        discarded_cards = self.hand.hand.pop(choice)
-        self.deck.discard_pile.append(discarded_cards)
+        # discarded_cards = self.hand.hand.pop(choice)
+        # self.deck.discard_pile.append(discarded_cards)
         
-        input(f"I discarded {discarded_cards}")
+        input(f"\nI discarded {discarded_cards} cards.")
 
     def discard_played_cards(self, selection):
         discarded_count = 0

@@ -13,7 +13,7 @@
 import pdb
 import logging
 from objects import Deck, Hand
-from ui import Menu
+from ui import Menu, Draw
 import os
 import sys
 
@@ -26,8 +26,9 @@ import sys
 
 mydeck = Deck()
 myhand = Hand()
-game_menu = Menu(mydeck, myhand)
 
+game_menu = Menu(mydeck, myhand)
+draw = Draw(mydeck, myhand)
 
 # mydeck._populate_deck()
 # print(mydeck)
@@ -52,6 +53,9 @@ while 1:
     os.system('clear')
     print("***   Enter number to act:   ***\n")
     game_menu.display_menu()
+
+    # redraw to handsize
+    draw.redraw_to_handsize()
     # pdb.set_trace()
     myhand.fan()
     # mydeck.show_discard()
