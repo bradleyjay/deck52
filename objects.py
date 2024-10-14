@@ -1,5 +1,6 @@
 import pdb
 import random
+from ui import Draw
 
 class Card:
     def __init__(self, rank=None, suit=None):
@@ -14,6 +15,13 @@ class Card:
 class Hand:
     def __init__(self):
         self.hand = []
+        # self.deck = deck
+        self.handsize = 7
+        # self.draw_starting_hand()
+
+    def draw_starting_hand(self):
+        for i in range(0, self.handsize):
+            Draw.select(self)
 
     def fan(self):
         
@@ -38,7 +46,7 @@ class Deck:
     def _populate_deck(self):
         # pdb.set_trace()
         for suit in ['hearts', 'clubs','spades','diamonds']:
-            for rank in range(2,10):
+            for rank in range(2,11): # range is non-inclusive
                 
                 self.cards.append(Card(rank, suit))
                 # self.cards.append(['test'])
