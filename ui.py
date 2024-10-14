@@ -11,8 +11,8 @@ class Menu:
         self.options = [
             # Draw(self.deck, self.hand),
             Play(self.deck, self.hand), 
-            Discard(self.deck, self.hand),
-            PickCards(self.deck, self.hand)
+            Discard(self.deck, self.hand)
+            # PickCards(self.deck, self.hand)
         ]
 
         
