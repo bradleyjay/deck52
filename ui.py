@@ -10,10 +10,9 @@ class Menu:
         self.deck = deck
         self.hand = hand
         self.options = [
-            # Draw(self.deck, self.hand),
             Play(self.deck, self.hand), 
-            Discard(self.deck, self.hand)
-            # PickCards(self.deck, self.hand)
+            Discard(self.deck, self.hand),
+            Util()
         ]
 
         
@@ -26,15 +25,18 @@ class Menu:
             i+=1
 
     def select(self, option):
-        # if str(option) in self.options:
-        #     option.select()
-        # else:
-        #     print("Invalid entry")
+        # when menu selection made, call chosen method
         if option < len(self.options):
             self.options[option].select()
         
     
+class Util:
+    def select(self):
+        choice = input("Thanks for playing!")
+        sys.exit()
 
+    def __str__(self):
+        return 'Quit Game'  
 
         
 class PickCards:
@@ -45,12 +47,8 @@ class PickCards:
         self.mode = mode
 
     def select(self, selection_maximum):
-        # choice = int(input("Discard card - which one? Enter number"))
-        # # discarded_cards = self.hand.hand[choice]
-        # discarded_cards = self.hand.hand.pop(choice)
-        # self.deck.discard_pile.append(discarded_cards)
         selection = []
-        choice = 1
+        choice = 1 # dummy start value
         
         while 1:
             os.system('clear')
@@ -61,7 +59,9 @@ class PickCards:
                 print(f'{card[0]}), {card[1]}')
 
             choice = input(f'Select cards to {self.mode}. Enter number to add, y to confirm, c to cancel.')
-            valid_responses = ['0', '1','2','3','4','5','6']
+
+            # confirm response valid
+            valid_responses = ['0', '1','2','3','4','5','6', 'y', 'c']
             if choice not in valid_responses:
                 input(f"Invalid entry.") 
             elif choice == 'y':
@@ -69,19 +69,21 @@ class PickCards:
             elif choice == 'c':
                 return []
             else:
+                # dupe check
                 dupe = False
                 for card in selection:
                     if self.hand.hand[int(choice)] == card[1]:
                         dupe = True
                         
                 if dupe == True:
-                    input("Invalid, already selected. Choose again.") 
+                    input("Invalid, already selected. Choose again.")
+                # out-of-range error
                 elif len(selection) > selection_maximum - 1:
                     input(f"Invalid, you may only select {selection_maximum} cards.") 
                 else:
+                    # no issues? Append to selection dict
                     selection.append([int(choice), self.hand.hand[int(choice)]])
 
-        # print(f'Selected cards: {selection}')
         return selection
         input()
 
@@ -95,19 +97,20 @@ class Draw:
         self.hand = hand
 
     def select(self):
-        # pdb.set_trace()
+        # check cards remain in deck
         if len(self.deck.cards) < 1:
-            choice = input("Deck empty! Thanks for playing.")
-            sys.exit("Out of cards, user chose to exit.")
-        drawn_card = self.deck.cards.pop(0)  # TODO: this is awful naming, fix this
+            Util.select()
         
-        # print(f"I drew {drawn_card}")
+        # else, draw card
+        drawn_card = self.deck.cards.pop(0)  # TODO: this is awful naming, fix this
         self.hand.hand.append(drawn_card)
 
     def redraw_to_handsize(self):
+        # calc cards to draw
         cards_missing = self.hand.handsize - len(self.hand.hand)
+
+        # draw cards
         if cards_missing > 0:
-            # pdb.set_trace()
             for i in range(0, cards_missing):
                 self.select()
 
@@ -121,12 +124,10 @@ class Play:
 
     def select(self):
         picker = PickCards(self.deck, self.hand, "play")
-        # selection = PickCards.select()
         selection = picker.select(5)
         if not selection:
             input("I played 0 cards...")
             return
-        # print(f'Selection: {selection}')
 
         # check poker hand
         print(self.ispokerhand(selection))
@@ -135,19 +136,17 @@ class Play:
         # redraw played cards
         discarded_cards = Discard.discard_played_cards(self, selection)
         input(f"Re-drawing {discarded_cards} cards...")
-        # for i in range(0,discarded_cards):
-        #     Draw.select(self)
 
     def ispokerhand(self, selection):
         
-        # call your rank count, flush check, straight check results, then start going though hands...
+        # call your rank count, flush check, straight check results
         rank_tally, X_of_a_kind = self._rank_count(selection)
         flush = self._flush_check(selection)
         straight, selection_sorted = self._straight_check(selection)
 
         high_card = selection_sorted[-1]
         
-        ## hand ranks:
+        # check status against each hand
         # royal flush
         if straight == True and flush == True and rank_tally["A"] > 0 and rank_tally ["K"] > 0:
             return "Royal Flush"
@@ -188,10 +187,7 @@ class Play:
         else:
             return f"High Card: {high_card}"
 
-    def _rank_count(self, selection):
-        # two ways to do this - either you tally cards by rank, then create dict for checking 4 of 3 of etc hands
-        # or, dict first, but populating the dict requires tallying all 13 ranks first
-        
+    def _rank_count(self, selection):        
         rank_tally = {
             "A": 0,
             "K": 0,
@@ -227,7 +223,6 @@ class Play:
             return False
         else:
             suit = None
-            # pdb.set_trace()
             for card_in_hand in selection:
                 if suit is None:
                     suit = str(card_in_hand[1].suit)
@@ -244,6 +239,7 @@ class Play:
         face_and_ace = ['J','Q','K','A']
         numbers = []
         not_numbers = []
+
         # unpack
         for card_in_hand in selection:
             this_card = card_in_hand[1].rank
@@ -286,8 +282,6 @@ class Play:
                 else:
                     straight_counter = 0
 
-            # print(f"card: {card}, straight_counter: {straight_counter}")
-            # input()
         if straight_counter == 5:
             return True, selection_sorted
         else:
