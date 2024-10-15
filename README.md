@@ -1,6 +1,9 @@
 # Deck52
 It's like Poker, except...ya know, it's poker.
 
+# How To
+`python3 main.py`
+
 
 ### To Do:
 
