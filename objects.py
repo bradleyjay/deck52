@@ -8,21 +8,7 @@ class Card:
         self.rank = rank
         self.suit = suit
 
-    # def ascii_card(self):
-    #     print(
-    #         "____________" +
-    #         "|               |" +
-    #         f"|   {self.suit}{self.rank}  |" +
-    #         "|               |" +
-    #         "|_______________|" +
-
-
-
-    #     )
-
-    # def print(self):
     def __str__(self):
-        # print(self.rank, self.suit)
         return f'{self.rank}, {self.suit}'
 
 class Hand:
@@ -35,15 +21,8 @@ class Hand:
         i = 0
         print("---- Hand ----")
         for card in self.hand:
-
-            # print(card.rank, card.suit)
             print(f'{i}) {card}')
             i += 1
-            # print(str(card))
-            # card.print()
-        # else:
-        #     print("self.hand empty")
-
         ascii_printer(self.hand)
 
 class Deck:
@@ -53,8 +32,6 @@ class Deck:
         self.discard_pile = []
 
     def _populate_deck(self):
-        # pdb.set_trace()
-
         for suit in ['hearts', 'clubs','spades','diamonds']:
             for rank in range(2,11): # range is non-inclusive
                 
@@ -82,8 +59,5 @@ class Deck:
             print(card)
 
     def shuffle(self):
-        # generate list of random numbers 0-51
-        # set index of each card to that index
-        # return deck
         random.shuffle(self.cards)
 
