@@ -14,7 +14,7 @@ class Card:
 class Hand:
     def __init__(self):
         self.hand = []
-        self.handsize = 7 
+        self.handsize = 5
 
     def fan(self):
         
