@@ -7,4 +7,5 @@ It's like Poker, except...ya know, it's poker.
 - Multi-select in one line when choosing cards
 - Test suite
 - Cleaner code comments
+- web-accessible hosting
 - Readme
