@@ -1,6 +1,7 @@
 import pdb
 import os
 import logging
+import sys
 
 log = logging.getLogger(__name__)
 
@@ -43,7 +44,7 @@ class PickCards:
         self.hand = hand
         self.mode = mode
 
-    def select(self):
+    def select(self, selection_maximum):
         # choice = int(input("Discard card - which one? Enter number"))
         # # discarded_cards = self.hand.hand[choice]
         # discarded_cards = self.hand.hand.pop(choice)
@@ -51,7 +52,7 @@ class PickCards:
         selection = []
         choice = 1
         
-        while choice != '9':
+        while 1:
             os.system('clear')
             
             self.hand.fan()
@@ -60,12 +61,25 @@ class PickCards:
                 print(f'{card[0]}), {card[1]}')
 
             choice = input(f'Select cards to {self.mode}. Enter number to add, y to confirm, c to cancel.')
-            if choice == 'y':
+            valid_responses = ['0', '1','2','3','4','5','6']
+            if choice not in valid_responses:
+                input(f"Invalid entry.") 
+            elif choice == 'y':
                 break
             elif choice == 'c':
-                return 0
+                return []
             else:
-                selection.append([int(choice), self.hand.hand[int(choice)]])
+                dupe = False
+                for card in selection:
+                    if self.hand.hand[int(choice)] == card[1]:
+                        dupe = True
+                        
+                if dupe == True:
+                    input("Invalid, already selected. Choose again.") 
+                elif len(selection) > selection_maximum - 1:
+                    input(f"Invalid, you may only select {selection_maximum} cards.") 
+                else:
+                    selection.append([int(choice), self.hand.hand[int(choice)]])
 
         # print(f'Selected cards: {selection}')
         return selection
@@ -82,6 +96,9 @@ class Draw:
 
     def select(self):
         # pdb.set_trace()
+        if len(self.deck.cards) < 1:
+            choice = input("Deck empty! Thanks for playing.")
+            sys.exit("Out of cards, user chose to exit.")
         drawn_card = self.deck.cards.pop(0)  # TODO: this is awful naming, fix this
         
         # print(f"I drew {drawn_card}")
@@ -105,7 +122,10 @@ class Play:
     def select(self):
         picker = PickCards(self.deck, self.hand, "play")
         # selection = PickCards.select()
-        selection = picker.select()
+        selection = picker.select(5)
+        if not selection:
+            input("I played 0 cards...")
+            return
         # print(f'Selection: {selection}')
 
         # check poker hand
@@ -286,7 +306,7 @@ class Discard:
     def select(self):
         picker = PickCards(self.deck, self.hand, "discard")
         # selection = PickCards.select()
-        selection = picker.select()
+        selection = picker.select(7)
         discarded_cards = self.discard_played_cards(selection)
 
         # choice = int(input("Discard card - which one? Enter number"))
