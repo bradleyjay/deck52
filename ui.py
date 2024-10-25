@@ -144,8 +144,12 @@ class Play:
         flush = self._flush_check(selection)
         straight, selection_sorted = self._straight_check(selection)
 
-        high_card = selection_sorted[-1]
+        return self._hand_scoring(rank_tally, X_of_a_kind, flush, straight, selection_sorted)
         
+    def _hand_scoring(self, rank_tally, X_of_a_kind, flush, straight, selection_sorted):
+        
+        high_card = selection_sorted[-1]
+        # pdb.set_trace()
         # check status against each hand
         # royal flush
         if straight == True and flush == True and rank_tally["A"] > 0 and rank_tally ["K"] > 0:
@@ -166,10 +170,10 @@ class Play:
             return f"Full House: {X1}s and {X2}s"
         # flush
         elif flush == True:
-            return "Flush, {high_card} high"
+            return f"Flush, {high_card} high"
         # straight
         elif straight == True:
-            return "Straight, {high_card} high"
+            return f"Straight, {high_card} high"
         # three of a kind
         elif X_of_a_kind["3"]:
             X = X_of_a_kind["3"][0]
